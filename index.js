@@ -1,3 +1,4 @@
+// middleWare => what happens to the input to get the output
 /* module imports *************************************************************/
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -15,12 +16,17 @@ app.use(expressValidator());
 
 /* routes *********************************************************************/
 app.post("/", function(req, res) {
-    req.checkBody("email", "Pleas input a valid email address")
+    req.checkBody("email", "Please input a valid email address")
       // is the string empty?
       .notEmpty()
       // is the string a valid email address?
       .isEmail();
     // an array of objects encoding which fields failed validation and the corresponding error message
+    req.checkBody("name", "Please provide your name")
+      .notEmpty();
+      req.checkBody("password", "Create a strong password you will remember")
+      .notEmpty();
+
     const errors = req.validationErrors();
 
     if (errors) {
@@ -28,7 +34,7 @@ app.post("/", function(req, res) {
       res.send(errors);
     } else {
       // get the email from the request body
-      res.send("<p>Your user name is: " + req.body.email + "</p>");
+      res.send("<p>Your user name is: " + req.body.name + "</p><p>Your email is: " + req.body.email + "</p><p>Your password is: " + req.body.password + "</p>");
     }
 });
 
